@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tvDate"
+        android:text="TextView"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:layout_alignStart="@+id/tvDate"
+        android:layout_below="@+id/tvUsername"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="33dp" />
+
+    <TextView
+        android:id="@+id/tvHandle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:text="TextView"
+        android:textStyle="italic"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ImageButton
+        android:id="@+id/fave"
+        android:layout_width="27dp"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="@+id/retweet"
+        android:layout_alignTop="@+id/tvFave"
+        android:layout_below="@id/tvHandle"
+        android:layout_toEndOf="@+id/tvRetweet"
+        android:backgroundTint="@android:color/transparent"
+        android:paddingRight="5dp"
+        android:tint="@color/inline_action_retweet_pressed"
+        android:onClick="@color/inline_action_like_pressed"
+        app:srcCompat="@drawable/ic_vector_heart_stroke"
+        tools:layout_editor_absoluteX="247dp"
+        tools:layout_editor_absoluteY="63dp" />
+
+    <ImageButton
+        android:id="@+id/retweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tvDate"
+        android:layout_below="@id/tvDate"
+        android:background="@android:color/transparent"
+        android:tint="@color/inline_action_retweet_pressed"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="59dp" />
+
+    <TextView
+        android:id="@+id/tvRetweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDate"
+        android:layout_toEndOf="@+id/retweet"
+        android:paddingLeft="7dp"
+        android:paddingRight="2dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="66dp"
+        tools:text="retweets" />
+
+    <TextView
+        android:id="@+id/tvFave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDate"
+        android:layout_toRightOf="@id/fave"
+        android:paddingLeft="10dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="279dp"
+        tools:layout_editor_absoluteY="66dp"
+        tools:text="likes" />
+</RelativeLayout>

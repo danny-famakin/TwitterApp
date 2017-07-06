@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweets;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.text.ParseException;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by famakindaniel7 on 6/26/17.
@@ -30,8 +33,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     private List<Tweets> mTweet;
     Context context;
-    public TweetAdapter(List<Tweets> tweet) {
+    private TweetAdapterListener mListener;
+    User user;
+
+
+
+
+    //CircleImageView imageView = (CircleImageView) findViewById(R.id.ivProfilePic);
+
+    public interface  TweetAdapterListener{
+        public void onItemSelected(View view,  int position);
+    }
+    public TweetAdapter(List<Tweets> tweet, TweetAdapterListener listener) {
         mTweet = tweet;
+        this.mListener = listener;
     }
     private TwitterClient client;
 
@@ -53,15 +68,45 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvHandle.setText("@" + tweet.user.screenName);
         holder.tvRetweet.setText(Long.toString(tweet.retweetCount));
         holder.tvFave.setText(Long.toString(tweet.likes));
+        client = TwitterApplication.getRestClient();
+
+        //final String profile = context.getResources().getString(R.string.profile);
+        holder.ivProfilePic.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent (context, TwitterUserActivity.class);
+                i.putExtra("id", tweet.user.uid);
+                i.putExtra("screen_name", tweet.user.screenName);
+                //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((TimelineActivity) context, view, profile);
+                context.startActivity(i /*,options.toBundle()*/);
+            }
+        });
+
         holder.fave.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                client = TwitterApplication.getRestClient();
+                if (!tweet.liked){
                 client.likeTweet(Long.toString(tweet.uid), new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
                         holder.tvFave.setText(Long.toString(tweet.likes + 1));
+                        tweet.liked = true;
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });}
+                else{
+                client.unLike(Long.toString(tweet.uid), new AsyncHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show();
+                        holder.tvFave.setText(Long.toString(tweet.likes));
+                        tweet.liked = false;
                     }
 
                     @Override
@@ -69,24 +114,41 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
                     }
                 });
+                }
             }
         });
         holder.retweet.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                client = TwitterApplication.getRestClient();
+
+                if (!tweet.retweeted){
                 client.reTweet(Long.toString(tweet.uid), new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Toast.makeText(context, "Retweeted", Toast.LENGTH_SHORT).show();
                         holder.tvRetweet.setText(Long.toString(tweet.retweetCount + 1));
+                        tweet.retweeted = true;
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
                     }
-                });
+                });}
+                else{
+                    client.unRetweet(Long.toString(tweet.uid), new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            Toast.makeText(context, "Unretweeted", Toast.LENGTH_SHORT).show();
+                            holder.tvRetweet.setText(Long.toString(tweet.retweetCount));
+                            tweet.retweeted = false;
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                }
             }
         });
 
@@ -98,7 +160,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         return mTweet.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivProfilePic;
         public TextView tvUsername;
         public TextView tvBody;
@@ -112,7 +174,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super (itemView);
 
-            ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
+            ivProfilePic = (CircleImageView) itemView.findViewById(R.id.ivProfilePic);
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
@@ -121,6 +183,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             fave = (ImageButton) itemView.findViewById(R.id.fave);
             tvRetweet = (TextView) itemView.findViewById(R.id.tvRetweet);
             tvFave = (TextView) itemView.findViewById(R.id.tvFave);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null){
+                        int position = getAdapterPosition();
+                        mListener.onItemSelected(view, position);
+                    }
+                }
+            });
         }
     }
     public String getRelativeTimeAgo(String rawJsonDate) {

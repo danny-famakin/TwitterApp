@@ -60,6 +60,41 @@ public class TwitterClient extends OAuthBaseClient {
 	 *    i.e client.get(apiUrl, params, handler);
 	 *    i.e client.post(apiUrl, params, handler);
 	 */
+	public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("count", 30);
+		params.put("since_id", 1);
+		client.get(apiUrl, params, handler);
+	}
+	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("count", 30);
+		params.put("screen_name", screenName);
+		client.get(apiUrl, params, handler);
+	}
+	public void getUserInfo(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		// Can specify query string params directly or through RequestParams.
+		client.get(apiUrl, null, handler);
+	}
+	public void getOtherUserInfo(String id, String screenName, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("screen_name", screenName);
+		params.put("id", id);
+		client.get(apiUrl, params, handler);
+	}
+	public void getSearchResults(String query, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("search/tweets.json");
+        RequestParams params = new RequestParams();
+        params.put("q", query);
+		client.get(apiUrl, params, handler);
+	}
 	public void postTweet(String message, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
@@ -71,12 +106,21 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/retweet/" + id + ".json");
 		client.post(apiUrl, null, handler);
 	}
+	public void unRetweet(String id, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("statuses/unretweet/" + id + ".json");
+		client.post(apiUrl, null, handler);
+	}
 	public void likeTweet(String id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("favorites/create.json");
 		RequestParams params = new RequestParams();
 		params.put("id", id);
 		client.post(apiUrl, params, handler);
 	}
-
+    public void unLike(String id, AsyncHttpResponseHandler handler){
+		String apiUrl = getApiUrl("favorites/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		client.post(apiUrl, params, handler);
+	}
 }
 

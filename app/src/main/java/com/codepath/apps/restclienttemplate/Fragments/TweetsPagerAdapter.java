@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.codepath.apps.restclienttemplate.TimelineActivity;
+
 /**
  * Created by famakindaniel7 on 7/3/17.
  */
@@ -12,9 +14,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class TweetsPagerAdapter extends FragmentPagerAdapter {
     private  String tabTitles[] = new String[] {"Home", "Mentions"};
     private Context context;
-    public TweetsPagerAdapter(FragmentManager fm, Context context){
+    HomeTimelineFragment timelineFragment;
+    MentionsTimelineFragment mentionsFragment;
+    public TweetsPagerAdapter(FragmentManager fm, TimelineActivity timelineActivity) {
         super(fm);
-        this.context = context;
+         timelineFragment = new HomeTimelineFragment();
+         mentionsFragment = new MentionsTimelineFragment();
+        //this.context = context;
     }
     @Override
     public int getCount() {
@@ -24,9 +30,9 @@ public class TweetsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new HomeTimelineFragment();
+            return timelineFragment;
         } else if (position == 1) {
-            return new MentionsTimelineFragment();
+            return mentionsFragment;
         } else {
             return null;
         }

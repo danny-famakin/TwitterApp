@@ -33,7 +33,8 @@ public class UserTimelineFragment extends TweetsListFragment {
         client = TwitterApplication.getRestClient();
         populateTimeline();
     }
-    private void populateTimeline(){
+    @Override
+    public void populateTimeline(){
         String screenName = getArguments().getString("screen_name");
         client.getUserTimeline(screenName, new JsonHttpResponseHandler(){
             @Override

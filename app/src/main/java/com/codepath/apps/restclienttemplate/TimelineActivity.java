@@ -1,7 +1,9 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -11,12 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.Fragments.HomeTimelineFragment;
+import com.codepath.apps.restclienttemplate.Fragments.MentionsTimelineFragment;
 import com.codepath.apps.restclienttemplate.Fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.Fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweets;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -26,6 +31,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     private TwitterClient client;
     //TweetsListFragment fragmentTweetList;
     private final int REQUEST_CODE = 10;
+    private TweetsPagerAdapter pagerAdapter;
+
+    private MentionsTimelineFragment mentionsTimelineFragment;
 
 
     @Override
@@ -34,7 +42,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         setContentView(R.layout.activity_timeline);
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+        pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(vpPager);
         //client = TwitterApplication.getRestClient();
@@ -202,20 +211,23 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
           //  }
        // });
   /// }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // REQUEST_CODE is defined above
-        //if (resultCode == RESUL
-        // T_OK && requestCode == REQUEST_CODE) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             // Extract name value from result extras
-            //Tweets tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-           // tweets.add(0, tweet);
-           // tweetAdapter.notifyItemInserted(0);
-           // rvTweets.scrollToPosition(0);
+            Tweets tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+            // tweets.add(0, tweet);
+            // tweetAdapter.notifyItemInserted(0);
+            // rvTweets.scrollToPosition(0);
             // Toast the name to display temporarily on screen
             //Toast.makeText(this, "Posted New Tweet!", Toast.LENGTH_SHORT).show();
-        }
+             HomeTimelineFragment tf = (HomeTimelineFragment) pagerAdapter.getItem(0);
+            tf.addTweet(tweet);
 
+        }
+    }
     public void onProfileView(MenuItem item) {
         Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);

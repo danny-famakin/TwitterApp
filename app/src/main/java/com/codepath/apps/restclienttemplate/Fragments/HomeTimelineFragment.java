@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.models.Tweets;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ import cz.msebera.android.httpclient.Header;
 public class HomeTimelineFragment extends TweetsListFragment {
     //private SwipeRefreshLayout swipeContainer;
     TwitterClient client;
+    //ArrayList<Tweets> tweets;
     //TweetAdapter tweetAdapter;
 
     @Override
@@ -31,15 +33,16 @@ public class HomeTimelineFragment extends TweetsListFragment {
         client = TwitterApplication.getRestClient();
         populateTimeline();
 
+
         //swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
+         //Setup refresh listener which triggers new data loading
         //swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
         // @Override
         // public void onRefresh() {
         // tweetAdapter.clear();
         //populateTimeline();
-        // swipeContainer.setRefreshing(false);
-        // }
+         //swipeContainer.setRefreshing(false);
+         //}
         //});
         // Configure the refreshing colors
         //swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -47,8 +50,13 @@ public class HomeTimelineFragment extends TweetsListFragment {
         //android.R.color.holo_orange_light,
         //android.R.color.holo_red_light);
     }
-
-    private void populateTimeline(){
+    public void addTweet(Tweets tweet){
+        tweets.add(0, tweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.scrollToPosition(0);
+    }
+    @Override
+    public void populateTimeline(){
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

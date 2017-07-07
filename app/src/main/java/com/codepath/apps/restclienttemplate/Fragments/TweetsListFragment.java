@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,13 +32,14 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
     TweetAdapter tweetAdapter;
     ArrayList<Tweets> tweets;
     RecyclerView rvTweets;
-    //private SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout swipeContainer;
+    //TwitterClient client;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragments_tweets_list, container, false);
-        //swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
 
         tweets = new ArrayList<>();
@@ -45,24 +47,26 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTweets.addItemDecoration(new DividerItemDecoration(getContext()));
         rvTweets.setAdapter(tweetAdapter);
-        return v;
 
         //Setup refresh listener which triggers new data loading
-        //swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-           // @Override
-            //public void onRefresh() {
-               // tweetAdapter.clear();
-               // populateTimeline();
-                //swipeContainer.setRefreshing(false);
-            //}
-        //});
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tweetAdapter.clear();
+                populateTimeline();
+                swipeContainer.setRefreshing(false);
+            }
+        });
         // Configure the refreshing colors
-        //swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-               // android.R.color.holo_green_light,
-                //android.R.color.holo_orange_light,
-                //android.R.color.holo_red_light);
-
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+     return v;
     }
+    public void  populateTimeline(){}
+
 
     public void addItems(JSONArray response){
         for (int i = 0; i < response.length(); i++) {

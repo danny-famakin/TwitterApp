@@ -11,6 +11,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/rlUserHeader">
 
+        <ImageView
+            android:id="@+id/ivProfileBackgroundImage"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/gallery_thumb"
+            app:srcCompat="@android:color/darker_gray" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivProfileImage"
             android:layout_width="75dp"
@@ -24,7 +35,7 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivProfileImage"
+            android:layout_below="@id/ivProfileBackgroundImage"
             android:text="Name"
             android:textSize="16sp"/>
 

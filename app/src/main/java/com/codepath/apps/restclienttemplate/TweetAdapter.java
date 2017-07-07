@@ -82,6 +82,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 context.startActivity(i /*,options.toBundle()*/);
             }
         });
+        if (tweet.mediaUrl != null && !tweet.mediaUrl.isEmpty()){
+            holder.ivMedia.setVisibility(View.VISIBLE);
+            Glide.with(context).load(tweet.mediaUrl).into(holder.ivMedia);
+        } else {
+            holder.ivMedia.setVisibility(View.GONE);
+        }
+        //Glide.with(context).load(tweet.user.profileBannerUrl).into(holder.ivProfileBackgroundImage);
 
         holder.fave.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -170,6 +177,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageButton fave;
         public TextView tvRetweet;
         public TextView tvFave;
+        public ImageView ivMedia;
+        public ImageView ivProfileBackgroundImage;
 
         public ViewHolder(View itemView) {
             super (itemView);
@@ -183,6 +192,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             fave = (ImageButton) itemView.findViewById(R.id.fave);
             tvRetweet = (TextView) itemView.findViewById(R.id.tvRetweet);
             tvFave = (TextView) itemView.findViewById(R.id.tvFave);
+            ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
+            ivProfileBackgroundImage = (ImageView) itemView.findViewById(R.id.ivProfileBackgroundImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

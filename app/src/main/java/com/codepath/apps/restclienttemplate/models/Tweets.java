@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -17,6 +18,7 @@ public class Tweets {
     public long likes;
     public boolean liked;
     public boolean retweeted;
+    public String mediaUrl;
 
     public Tweets() {
     }
@@ -32,6 +34,14 @@ public class Tweets {
         tweet.retweeted = jsonObject.getBoolean("retweeted");
         tweet.liked = jsonObject.getBoolean("favorited");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        tweet.mediaUrl = null;
+        JSONObject json  = jsonObject.optJSONObject("entities");
+        if (json != null) {
+            JSONArray jsonArray = json.optJSONArray("media");
+            if (jsonArray != null && !jsonArray.isNull(0)){
+                tweet.mediaUrl = jsonArray.getJSONObject(0).optString("media_url");
+            }
+        }
         return tweet;
     }
 }

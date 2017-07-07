@@ -16,6 +16,7 @@ public class User {
     public String tagLine;
     public int followersCount;
     public int followingCount;
+    public String profileBannerUrl;
 
     public User() {
     }
@@ -29,6 +30,7 @@ public class User {
         user.tagLine = json.getString("description");
         user.followersCount = json.getInt("followers_count");
         user.followingCount = json.getInt("friends_count");
+        user.profileBannerUrl = json.getString("profile_background_image_url");
         return user;
     }
 }

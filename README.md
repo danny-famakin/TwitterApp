@@ -38,7 +38,7 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/danny-famakin/TwitterApp/blob/master/Twitter.gif' title='Twitter App ' width='' alt='Video Walkthrough' />
+<img src='https://github.com/danny-famakin/TwitterApp/blob/master/Twitter_2.gif' title='Twitter App ' width='' alt='Video Walkthrough' />
 
 GIF created with [ScreenRecorder].
 

@@ -2,7 +2,7 @@
 
 The **Twitter App** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **36** hours spent in total
+Time spent: **100** hours spent in total
 
 ## User Stories
 
@@ -17,12 +17,16 @@ The following **required** functionality is completed:
   * [x] User can then enter a new tweet and post this to twitter
   * [x] User is taken back to home timeline with **new tweet visible** in timeline
   * [x] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
+* [x] User can view home and mentions timelines
+* [x] Users can view their personal profile and profiles of people they follow on clicking the profile image within a tweet
 
 The following **optional** features are implemented:
 
 * [x] User can **pull down to refresh tweets timeline**
 * [x] User is using **"Twitter branded" colors and styles**
   * [x] User can **take favorite (and unfavorite) or reweet** actions on a tweet
+  * [x] User can see embedded image media within the tweet item in list or detail view.
+  * [x] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser to view the tweet.
 
 The following **bonus** features are implemented:
 
